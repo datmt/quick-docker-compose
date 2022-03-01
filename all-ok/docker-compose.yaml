@@ -1,0 +1,9 @@
+version: '3.8'
+
+
+services:
+  all_ok:
+    image: codingpuss/all-ok
+    ports:
+      - "8888:80"
+    restart: always
