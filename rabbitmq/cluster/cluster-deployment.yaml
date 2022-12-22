@@ -5,9 +5,9 @@ services:
     image: rabbitmq:3-management
     hostname: rabbitmq1
     environment:
-      - RABBITMQ_ERLANG_COOKIE=SECRET
-      - RABBITMQ_CLUSTER_NODENAME=rabbit@rabbitmq1
-    
+      - RABBITMQ_ERLANG_COOKIE=SECRET_1234
+      - RABBITMQ_NODENAME=rabbit1@rabbitmq
+    restart: always
     # setting custom username/password
     env_file:
       ./rabbit-user.env
@@ -22,34 +22,35 @@ services:
   rabbitmq2:
     image: rabbitmq:3-management
     hostname: rabbitmq2
+    restart: always 
     environment:
-      - RABBITMQ_ERLANG_COOKIE=SECRET
-      - RABBITMQ_CLUSTER_NODENAME=rabbit@rabbitmq2
-    # setting custom username/password
+      - RABBITMQ_ERLANG_COOKIE=SECRET_1234
+      - RABBITMQ_NODENAME=rabbit2@rabbitmq
+   # setting custom username/password
     env_file:
       ./rabbit-user.env
-    ports:
-      - "25672:15672"
-      - "5673:5672"
     volumes:
-      - rabbitmq2-data:/var/lib/rabbitmq
+#      - rabbitmq2-data:/var/lib/rabbitmq
+      - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
+    entrypoint: /usr/local/bin/cluster-entrypoint.sh
     networks:
       - rabbitmq-cluster
 
   rabbitmq3:
     image: rabbitmq:3-management
     hostname: rabbitmq3
+    restart: always 
     environment:
-      - RABBITMQ_ERLANG_COOKIE=SECRET
-      - RABBITMQ_CLUSTER_NODENAME=rabbit@rabbitmq3
+      - RABBITMQ_ERLANG_COOKIE=SECRET_1234
+      - RABBITMQ_NODENAME=rabbit3@rabbitmq
     # setting custom username/password
     env_file:
       ./rabbit-user.env
-    ports:
-      - "35672:15672"
-      - "5674:5672"
     volumes:
       - rabbitmq3-data:/var/lib/rabbitmq
+#      - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
+#    entrypoint: /usr/local/bin/cluster-entrypoint.sh
+
     networks:
       - rabbitmq-cluster
 
