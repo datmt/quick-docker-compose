@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=SECRET
+      - RABBITMQ_CLUSTER_NODENAME=rabbit@rabbitmq
+    env_file:
+      - ./rabbit-user.env
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq-data:
